@@ -2,6 +2,12 @@ venv/
 
 .vscode
 .env
+.idea
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
 
 *.pyc
 __pycache__/
@@ -12,6 +18,9 @@ instance/
 .coverage
 htmlcov/
 
-/dist/
 /build/
 *.egg-info/
+node_modules
+/dist
+
+npm-debug.log*
