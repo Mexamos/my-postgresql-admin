@@ -1,25 +1,21 @@
-from flask import Flask, request
+from flask import Flask, request, jsonify
+from flask_cors import CORS
 from model import Database
 
 app = Flask(__name__)
+CORS(app, origins='*', supports_credentials=True)
+
 db = Database()
 
-@app.route("/")
+@app.route("/databases")
 def hello():
+  database_list = db.select_rows('SELECT datname FROM pg_database;')
+  print('database_list', database_list)
+  return jsonify(database_list)
 
-  db.select_rows('SELECT datname FROM pg_database;')
-  return "Hello World!"
-
-@app.route("/name/<name>")
-def get_book_name(name):
-  return "name : {}".format(name)
-
-@app.route("/details")
-def get_book_details():
-  # author=request.args.get('author')
-  # published=request.args.get('published')
-  # return "Author : {}, Published: {}".format(author,published)
-  db.select_rows("SELECT table_schema, table_name, table_type FROM information_schema.tables WHERE table_catalog = 'demo' ORDER BY table_schema, table_name;", dbname='demo')
+@app.route("/databases/<dbname>/tables")
+def get_book_details(dbname):
+  db.select_rows("SELECT table_schema, table_name, table_type FROM information_schema.tables WHERE table_catalog = '" + dbname + "' ORDER BY table_schema, table_name;", dbname=dbname)
   return "Details !"
 
 if __name__ == '__main__':

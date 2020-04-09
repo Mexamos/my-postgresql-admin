@@ -33,23 +33,20 @@ class Database:
     """Run a SQL query to select rows from table."""
     self.connect(dbname)
     with self.conn.cursor() as cur:
-      print('query', query)
       cur.execute(query)
-      print('cur.fetchall()', cur.fetchall())
-      # records = [row[0] for row in cur.fetchall()]
-      # print('records', records)
+      records = [row[0] for row in cur.fetchall()]
       cur.close()
-      # return records
+      return records
   
-  def select_rows_dict_cursor(self, query):
-    """Run a SQL query to select rows from table and return dictionarys."""
-    self.connect()
-    with self.conn.cursor(cursor_factory=DictCursor) as cur:
-      cur.execute(query)
-      print('cur.fetchall()', cur.fetchall())
-      for row in cur.fetchall():
-        # logger.info(row)
-        print('row', row)
+  # def select_rows_dict_cursor(self, query):
+  #   """Run a SQL query to select rows from table and return dictionarys."""
+  #   self.connect()
+  #   with self.conn.cursor(cursor_factory=DictCursor) as cur:
+  #     cur.execute(query)
+  #     print('cur.fetchall()', cur.fetchall())
+  #     for row in cur.fetchall():
+  #       # logger.info(row)
+  #       print('row', row)
 
   def update_rows(self, query):
     """Run a SQL query to update rows in table."""
