@@ -46,13 +46,13 @@ export default {
     }
   },
   mounted () {
-    // this.getDataBaseTables()
+    this.getSchema()
   },
   methods: {
-    getDataBaseTables () {
-      this.$http.get(`http://127.0.0.1:5000/databases/${this.$router.currentRoute.params.dbname}/tables`)
+    getSchema () {
+      this.$http.get(`http://127.0.0.1:5000/databases/${this.$router.currentRoute.params.dbname}/schema/${this.$router.currentRoute.params.dbschema}`)
       .then(function (response) {
-        this.tables = response.body
+        console.log('response', response)
       }.bind(this))
       .catch(function(reject) {
         console.log('Error in getDataBaseTables, reject', reject)

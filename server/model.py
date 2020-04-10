@@ -30,26 +30,14 @@ class Database:
         logger.info('Connection opened successfully.')
 
   def select_rows(self, query, dbname=''):
-    """Run a SQL query to select rows from table."""
     self.connect(dbname)
     with self.conn.cursor(cursor_factory=RealDictCursor) as cur:
       cur.execute(query)
       records = json.dumps(cur.fetchall())
       cur.close()
       return records
-  
-  # def select_rows_dict_cursor(self, query):
-  #   """Run a SQL query to select rows from table and return dictionarys."""
-  #   self.connect()
-  #   with self.conn.cursor(cursor_factory=DictCursor) as cur:
-  #     cur.execute(query)
-  #     print('cur.fetchall()', cur.fetchall())
-  #     for row in cur.fetchall():
-  #       # logger.info(row)
-  #       print('row', row)
 
   def update_rows(self, query):
-    """Run a SQL query to update rows in table."""
     self.connect()
     with self.conn.cursor() as cur:
       cur.execute(query)

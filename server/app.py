@@ -20,8 +20,8 @@ def get_table_list(dbname):
 
 @app.route("/databases/<dbname>/schema/<schemaname>")
 def get_schema(dbname, schemaname):
-  # relation = db.select_rows("SELECT column_name, data_type FROM information_schema.columns WHERE table_schema = '" + schemaname + "' AND table_name = '" + tablename + "';", dbname=dbname)
-  return 'Hello!'
+  schema_table_list = db.select_rows("SELECT table_name, json_agg(json_build_object('column_name', column_name, 'data_type', data_type)) FROM information_schema.columns WHERE table_schema = '" + schemaname + "' GROUP BY table_name;", dbname=dbname)
+  return schema_table_list
 
 @app.route("/databases/<dbname>/schema/<schemaname>/tables/<tablename>")
 def get_relation(dbname, schemaname, tablename):
