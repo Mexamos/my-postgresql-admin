@@ -1,8 +1,8 @@
 <template>
   <div class="scheme-wrapper">
     <div class="relations">
-      <div class="relation-wrapper" v-if="relations && relations.length > 0" @click="$router.push({ name: 'relation', params: { dbname: $router.currentRoute.params.dbname, dbschema: $router.currentRoute.params.dbschema, relation: relation.table_name }})" v-for="(relation, index) in relations" :key="index">
-        <div class="relation-title">
+      <div class="relation-wrapper" v-if="relations && relations.length > 0" v-for="(relation, index) in relations" :key="index">
+        <div class="relation-title relation-name" @click="$router.push({ name: 'relation', params: { dbname: $router.currentRoute.params.dbname, dbschema: $router.currentRoute.params.dbschema, relation: relation.table_name }})">
           Relation name: {{ relation.table_name }}
         </div>
         <div class="relation-title">
@@ -64,10 +64,10 @@ export default {
         text-align: left;
         margin-bottom: 3px;
       }
-    }
-    .relation-wrapper:hover {
-      box-shadow: 0 0 10px rgba(0,0,0,0.5);
-      transition: .3s;
+      .relation-name:hover {
+        color: #7957d5;
+        text-decoration: underline;
+      }
     }
   }
 }
