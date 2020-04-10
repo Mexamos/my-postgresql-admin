@@ -1,48 +1,31 @@
 <template>
-  <div class="databases-wrapper">
-    <!-- <b-table :data="tables" :columns="columns">
-      <template slot-scope="props">
-        <b-table-column>
-          <router-link :to="{ name: 'database_tables', params: { dbname: props.row.table_schema }}">
-            {{ props.row.table_schema }}
-          </router-link>
-        </b-table-column>
+  <div class="scheme-wrapper">
+    <div class="relations">
+      <div class="relation-wrapper" v-if="relations && relations.length > 0" @click="$router.push({ name: 'relation', params: { dbname: $router.currentRoute.params.dbname, dbschema: $router.currentRoute.params.dbschema, relation: relation.table_name }})" v-for="(relation, index) in relations" :key="index">
+        <div class="relation-title">
+          Relation name: {{ relation.table_name }}
+        </div>
+        <div class="relation-title">
+          Relation type: {{ relation.table_type }}
+        </div>
 
-        <b-table-column>
-          <router-link :to="{ name: 'database_tables', params: { dbname: props.row.table_name }}">
-            {{ props.row.table_name }}
-          </router-link>
-        </b-table-column>
-
-        <b-table-column>
-          {{ props.row.table_type }}
-        </b-table-column>
-      </template>
-    </b-table> -->
+        <relation-view :relation="relation.columns"></relation-view>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
+import RelationView from '@/components/RelationView.vue'
 
 export default {
   name: 'SchemaRelations',
+  components: {
+    RelationView
+  },
   data () {
     return {
-      tables: [],
-      columns: [
-        {
-          field: 'table_schema',
-          label: 'Schema',
-        },
-        {
-          field: 'table_name',
-          label: 'Table name',
-        },
-        {
-          field: 'table_type',
-          label: 'Table type',
-        },
-      ]
+      relations: [],
     }
   },
   mounted () {
@@ -52,7 +35,7 @@ export default {
     getSchema () {
       this.$http.get(`http://127.0.0.1:5000/databases/${this.$router.currentRoute.params.dbname}/schema/${this.$router.currentRoute.params.dbschema}`)
       .then(function (response) {
-        console.log('response', response)
+        this.relations = response.body
       }.bind(this))
       .catch(function(reject) {
         console.log('Error in getDataBaseTables, reject', reject)
@@ -61,3 +44,31 @@ export default {
   }
 }
 </script>
+
+<style lang="scss" scoped>
+.scheme-wrapper {
+
+  .relations {
+    display: flex;
+    flex-wrap: wrap;
+
+    .relation-wrapper {
+      border: 1px solid grey;
+      border-radius: 3px;
+      padding: 10px;
+      margin: 20px;
+      min-width: 300px;
+      cursor: pointer;
+
+      .relation-title {
+        text-align: left;
+        margin-bottom: 3px;
+      }
+    }
+    .relation-wrapper:hover {
+      box-shadow: 0 0 10px rgba(0,0,0,0.5);
+      transition: .3s;
+    }
+  }
+}
+</style>

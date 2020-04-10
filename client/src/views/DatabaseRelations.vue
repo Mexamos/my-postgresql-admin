@@ -1,20 +1,25 @@
 <template>
   <div class="databases-wrapper">
-    <b-table :data="tables" :columns="columns">
+    <b-table :data="tables" 
+      :default-sort-direction="'asc'"
+      :sort-icon="'arrow-up'"
+      :sort-icon-size="'is-small'"
+      default-sort="table_schema"
+    >
       <template slot-scope="props">
-        <b-table-column>
+        <b-table-column field="table_schema" label="Schema" sortable>
           <router-link :to="{ name: 'schema_relations', params: { dbname: $router.currentRoute.params.dbname, dbschema: props.row.table_schema }}">
             {{ props.row.table_schema }}
           </router-link>
         </b-table-column>
 
-        <b-table-column>
+        <b-table-column field="table_name" label="Table name" sortable>
           <router-link :to="{ name: 'relation', params: { dbname: $router.currentRoute.params.dbname, dbschema: props.row.table_schema, relation: props.row.table_name }}">
             {{ props.row.table_name }}
           </router-link>
         </b-table-column>
 
-        <b-table-column>
+        <b-table-column field="table_type" label="Table type" sortable>
           {{ props.row.table_type }}
         </b-table-column>
       </template>
