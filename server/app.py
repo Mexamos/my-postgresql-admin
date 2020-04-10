@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request
 from flask_cors import CORS
 from model import Database
 
@@ -8,15 +8,25 @@ CORS(app, origins='*', supports_credentials=True)
 db = Database()
 
 @app.route("/databases")
-def hello():
+def get_data_bases():
   database_list = db.select_rows('SELECT datname FROM pg_database;')
   print('database_list', database_list)
-  return jsonify(database_list)
+  return database_list
 
 @app.route("/databases/<dbname>/tables")
-def get_book_details(dbname):
-  db.select_rows("SELECT table_schema, table_name, table_type FROM information_schema.tables WHERE table_catalog = '" + dbname + "' ORDER BY table_schema, table_name;", dbname=dbname)
-  return "Details !"
+def get_table_list(dbname):
+  tables_list = db.select_rows("SELECT table_schema, table_name, table_type FROM information_schema.tables WHERE table_catalog = '" + dbname + "' ORDER BY table_schema, table_name;", dbname=dbname)
+  return tables_list
+
+@app.route("/databases/<dbname>/schema/<schemaname>")
+def get_schema(dbname, schemaname):
+  # relation = db.select_rows("SELECT column_name, data_type FROM information_schema.columns WHERE table_schema = '" + schemaname + "' AND table_name = '" + tablename + "';", dbname=dbname)
+  return 'Hello!'
+
+@app.route("/databases/<dbname>/schema/<schemaname>/tables/<tablename>")
+def get_relation(dbname, schemaname, tablename):
+  relation = db.select_rows("SELECT column_name, data_type FROM information_schema.columns WHERE table_schema = '" + schemaname + "' AND table_name = '" + tablename + "';", dbname=dbname)
+  return relation
 
 if __name__ == '__main__':
   app.run()

@@ -2,8 +2,8 @@ import os
 import sys
 from loguru import logger
 import psycopg2
-
-from psycopg2.extras import DictCursor
+import json
+from psycopg2.extras import RealDictCursor
 
 class Database:
   def __init__(self):
@@ -32,9 +32,9 @@ class Database:
   def select_rows(self, query, dbname=''):
     """Run a SQL query to select rows from table."""
     self.connect(dbname)
-    with self.conn.cursor() as cur:
+    with self.conn.cursor(cursor_factory=RealDictCursor) as cur:
       cur.execute(query)
-      records = [row[0] for row in cur.fetchall()]
+      records = json.dumps(cur.fetchall())
       cur.close()
       return records
   
