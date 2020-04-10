@@ -1,13 +1,17 @@
 <template>
-  <div class="relation-wrapper">
-  
+  <div class="relation-page-wrapper">
+    <relation-view :relation="relation"></relation-view>
   </div>
 </template>
 
 <script>
+import RelationView from '@/components/RelationView.vue'
 
 export default {
-  name: 'Relation',
+  name: 'RelationPage',
+  components: {
+    RelationView
+  },
   data () {
     return {
       relation: null
@@ -21,7 +25,6 @@ export default {
       this.$http.get(`http://127.0.0.1:5000/databases/${this.$router.currentRoute.params.dbname}/schema/${this.$router.currentRoute.params.dbschema}/tables/${this.$router.currentRoute.params.relation}`)
       .then(function (response) {
         this.relation = response.body
-        console.log('this.relation', this.relation)
       }.bind(this))
       .catch(function(reject) {
         console.log('Error in getRelation, reject', reject)

@@ -3,7 +3,7 @@ import VueRouter from 'vue-router'
 import Databases from '../views/Databases.vue'
 import DatabaseRelations from '../views/DatabaseRelations.vue'
 import SchemaRelations from '../views/SchemaRelations.vue'
-import Relation from '../views/Relation.vue'
+import RelationPage from '../views/RelationPage.vue'
 
 Vue.use(VueRouter)
 
@@ -26,7 +26,7 @@ const routes = [
   {
     path: '/:dbname/schema/:dbschema/relation/:relation',
     name: 'relation',
-    component: Relation
+    component: RelationPage
   },
 ]
 
